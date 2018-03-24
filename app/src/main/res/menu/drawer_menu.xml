@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:showIn="navigation_view">
+
+    <item android:title="Settings">
+        <menu>
+            <group>
+                <item
+                    android:id="@+id/callingSubmenu"
+                    android:icon="@android:drawable/sym_action_call"
+                    android:title="Call blocking" />
+
+                <item android:title="Blacklisted"
+                    android:id="@+id/blockBlacklistCalls"
+                    app:actionLayout="@layout/toggle_layout"/>
+
+                <item android:title="Private/Unknown"
+                    android:id="@+id/blockPrivateCalls"
+                    app:actionLayout="@layout/toggle_layout"/>
+
+
+                <item android:title="Non-Contact"
+                    android:id="@+id/blockNonContactCalls"
+                    app:actionLayout="@layout/toggle_layout"/>
+
+                <item android:title="Block All Calls"
+                    android:id="@+id/blockAllCalls"
+                    app:actionLayout="@layout/toggle_layout"/>
+
+            </group>
+
+            <group>
+                <item
+                    android:id="@+id/mesagingSubmenu"
+                    android:icon="@android:drawable/stat_notify_chat"
+                    android:title="Message Blocking" />
+
+                <item android:title="Blacklisted"
+                    android:id="@+id/blockBlacklistedMessages"
+                    app:actionLayout="@layout/toggle_layout"/>
+
+                <item android:title="Non-Contact"
+                    android:id="@+id/blockNonContactMessages"
+                    app:actionLayout="@layout/toggle_layout"/>
+
+                <item android:title="Block All Messages"
+                    android:id="@+id/blockAllMessages"
+                    app:actionLayout="@layout/toggle_layout"/>
+
+
+            <item
+                android:id="@+id/nav"
+                android:icon="@drawable/ic_playlist_play_black_36dp"
+                android:iconTint="@color/deactivated"
+                android:title="SMS Auto-Response" />
+
+            <item android:title="Send Auto-SMS"
+                android:id="@+id/a"
+                app:actionLayout="@layout/toggle_layout"/>
+
+            <item android:title="Set default SMS"
+                android:id="@+id/b"
+                app:actionLayout="@layout/button_layout"/>
+
+            <item android:title="Block All Messages"
+                android:id="@+id/c"
+                app:actionLayout="@layout/toggle_layout"/>
+
+            </group>
+        </menu>
+    </item>
+</menu>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/number_source_selection_container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:visibility="visible">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/number_source_selection"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="26dp"
+            android:layout_weight="1"
+            android:text="Phone number to block:"
+            android:textSize="20dp" />
+
+        <Button
+            android:id="@+id/recent_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textView"
+            android:layout_marginLeft="38dp"
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="53dp"
+            android:text="Recent" />
+
+        <Button
+            android:id="@+id/contacts_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/recent_button"
+            android:layout_alignBottom="@+id/recent_button"
+            android:layout_centerHorizontal="true"
+            android:text="Contacts" />
+
+        <Button
+            android:id="@+id/custom_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/contacts_button"
+            android:layout_marginLeft="26dp"
+            android:layout_marginStart="26dp"
+            android:layout_toEndOf="@+id/contacts_button"
+            android:layout_toRightOf="@+id/contacts_button"
+            android:text="Custom" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
