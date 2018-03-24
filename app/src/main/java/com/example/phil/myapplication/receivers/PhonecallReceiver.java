@@ -1,4 +1,4 @@
-package com.example.phil.myapplication;
+package com.example.phil.myapplication.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

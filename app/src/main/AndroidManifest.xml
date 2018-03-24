@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
+        android:name=".app.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -17,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         >
-        <receiver android:name="com.example.phil.myapplication.MainActiv$CallReceiver" >
+        <receiver android:name=".receivers.CallReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
@@ -26,7 +27,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".MainActiv" android:screenOrientation="portrait">
+        <activity android:name=".ui.MainActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

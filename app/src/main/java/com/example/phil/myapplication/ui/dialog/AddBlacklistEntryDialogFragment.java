@@ -1,4 +1,4 @@
-package com.example.phil.myapplication;
+package com.example.phil.myapplication.ui.dialog;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CallLog;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -19,33 +20,34 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.phil.myapplication.R;
+import com.example.phil.myapplication.repository.BlackListEntry;
+import com.example.phil.myapplication.repository.BlacklistRepository;
+import com.example.phil.myapplication.ui.MainActivity;
+
 import java.util.ArrayList;
 
 
-public class CustomBottomSheet extends BottomSheetDialogFragment
-{
+public class AddBlacklistEntryDialogFragment extends BottomSheetDialogFragment {
     Button recent_button, contacts_button, custom_button;
     String inputString;
+
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
-    {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.number_source_selection, container, false);
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
-    {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recent_button = (Button)view.findViewById(R.id.recent_button);
+        recent_button = (Button) view.findViewById(R.id.recent_button);
         contacts_button = (Button) view.findViewById(R.id.contacts_button);
         custom_button = (Button) view.findViewById(R.id.custom_button);
 
-        recent_button.setOnClickListener(new View.OnClickListener()
-        {
+        recent_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 Uri allCalls = Uri.parse("content://call_log/calls");
 
                 Cursor cursor = getActivity().getContentResolver().query(allCalls, null, null, null, CallLog.Calls.DEFAULT_SORT_ORDER);
@@ -56,13 +58,11 @@ public class CustomBottomSheet extends BottomSheetDialogFragment
 
                 cursor.moveToFirst();
 
-                while(!cursor.isLast() || i < 10)
-                {
-                    if(Integer.parseInt(cursor.getString(cursor.getColumnIndex(CallLog.Calls.TYPE))) == CallLog.Calls.MISSED_TYPE
+                while (!cursor.isLast() || i < 10) {
+                    if (Integer.parseInt(cursor.getString(cursor.getColumnIndex(CallLog.Calls.TYPE))) == CallLog.Calls.MISSED_TYPE
                             || Integer.parseInt(cursor.getString(cursor.getColumnIndex(CallLog.Calls.TYPE))) == CallLog.Calls.BLOCKED_TYPE
                             || Integer.parseInt(cursor.getString(cursor.getColumnIndex(CallLog.Calls.TYPE))) == CallLog.Calls.REJECTED_TYPE
-                            || Integer.parseInt(cursor.getString(cursor.getColumnIndex(CallLog.Calls.TYPE))) == CallLog.Calls.INCOMING_TYPE)
-                    {
+                            || Integer.parseInt(cursor.getString(cursor.getColumnIndex(CallLog.Calls.TYPE))) == CallLog.Calls.INCOMING_TYPE) {
                         callList.add(cursor.getString(cursor.getColumnIndex(CallLog.Calls.NUMBER)));
                     }
                     cursor.moveToNext();
@@ -75,22 +75,18 @@ public class CustomBottomSheet extends BottomSheetDialogFragment
                 View convertView = (View) inflater.inflate(R.layout.lists, null);
                 alertDialog.setView(convertView);
                 final ListView lv = (ListView) convertView.findViewById(R.id.recentCallsListView);
-                final ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,callList);
+                final ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, callList);
                 lv.setAdapter(adapter2);
-                alertDialog.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener()
-                {
-                    public void onClick(DialogInterface dialog,int id)
-                    {
+                alertDialog.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
                         int pos = lv.getCheckedItemPosition();
 
                         inputString = lv.getAdapter().getItem(pos).toString();
-                        MainActiv.blacklistStringList.add(inputString);
-                        ((MainActiv)getActivity()).blacklistAdapter.notifyDataSetChanged();
+                        BlacklistRepository.getInstance().addBlackListEntry(new BlackListEntry(inputString,
+                                "Unknown", null));
                     }
-                }).setNegativeButton("Cancel",new DialogInterface.OnClickListener()
-                {
-                    public void onClick(DialogInterface dialog,int id)
-                    {
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
                 });
@@ -98,20 +94,16 @@ public class CustomBottomSheet extends BottomSheetDialogFragment
             }
         });
 
-        contacts_button.setOnClickListener(new View.OnClickListener()
-        {
+        contacts_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
 
             }
         });
 
-        custom_button.setOnClickListener(new View.OnClickListener()
-        {
+        custom_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 final LayoutInflater li = LayoutInflater.from(getActivity());
                 View promptsView = li.inflate(R.layout.custom_number_entry_prompt, null);
                 final EditText userInput = (EditText) promptsView.findViewById(R.id.addNumberEditText);
@@ -121,27 +113,21 @@ public class CustomBottomSheet extends BottomSheetDialogFragment
                 alertDialogBuilder.setView(promptsView);
 
                 //Set alert buttons:
-                alertDialogBuilder.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener()
-                {
-                    public void onClick(DialogInterface dialog,int id)
-                    {
+                alertDialogBuilder.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
                         inputString = userInput.getText().toString();
 
-                        if(!MainActiv.getBlacklistStringList().contains(inputString))
-                        {
-                            MainActiv.addToArray(inputString);
-                        }
-                        else
-                        {
-                            Toast.makeText(getContext(), "Error. Blacklist already contains the specified number.", Toast.LENGTH_SHORT).show();
+                        if (!BlacklistRepository.getInstance().containsNumber(inputString)) {
+                            BlacklistRepository.getInstance().addBlackListEntry(new BlackListEntry(inputString,
+                                    "Unknown", null));
+                        } else {
+                            Toast.makeText(getContext(), "Error. BlackListFragment already contains the specified number.", Toast.LENGTH_SHORT).show();
                         }
 
 
                     }
-                }).setNegativeButton("Cancel",new DialogInterface.OnClickListener()
-                {
-                    public void onClick(DialogInterface dialog,int id)
-                    {
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
                 });
@@ -155,18 +141,15 @@ public class CustomBottomSheet extends BottomSheetDialogFragment
         });
     }
 
-    public Button getRecent_button()
-    {
+    public Button getRecent_button() {
         return recent_button;
     }
 
-    public Button getContacts_button()
-    {
+    public Button getContacts_button() {
         return contacts_button;
     }
 
-    public Button getCustom_button()
-    {
+    public Button getCustom_button() {
         return custom_button;
     }
 
